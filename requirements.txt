@@ -1,5 +1,5 @@
 Flask
+requests
 pdfkit
-wkhtmltopdf
 gunicorn
-
+email-validator
