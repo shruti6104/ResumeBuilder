@@ -1,7 +1,7 @@
-# Shrutika's Pro-Level Resume Builder
+# Shrutika's Pro-Level Resume Builder (PDFShift Version)
 from flask import Flask, render_template, request, make_response, redirect, url_for
-import pdfkit
 import os
+import requests
 from email.message import EmailMessage
 import smtplib
 
@@ -10,15 +10,7 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 form_data = {}
 profile_image_path = ""
 
-# ✅ Updated path to wkhtmltopdf executable
-pdfkit_config = pdfkit.configuration(
-    wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-)
-
-# PDF options to enable access to local files
-pdf_options = {
-    'enable-local-file-access': None
-}
+PDFSHIFT_API_KEY = "sk_08f5c9c7703b5af1d5efbde8d679ace51ef796ce"  # Replace with your actual PDFShift API key
 
 @app.route('/')
 def index():
@@ -45,12 +37,22 @@ def download():
     absolute_path = os.path.abspath(profile_image_path)
     file_url = f"file:///{absolute_path.replace(os.sep, '/')}"
     rendered = render_template("pdf_template.html", data=form_data, profile_image=file_url)
-    pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options=pdf_options)
 
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=resume.pdf'
-    return response
+    # Send HTML to PDFShift API
+    response = requests.post(
+        "https://api.pdfshift.io/v3/convert/html",
+        auth=(PDFSHIFT_API_KEY, ''),
+        json={"source": rendered}
+    )
+
+    if response.status_code == 200:
+        pdf = response.content
+        res = make_response(pdf)
+        res.headers['Content-Type'] = 'application/pdf'
+        res.headers['Content-Disposition'] = 'attachment; filename=resume.pdf'
+        return res
+    else:
+        return f"PDF generation failed: {response.text}"
 
 @app.route('/send_email')
 def send_email():
@@ -62,11 +64,22 @@ def send_email():
     absolute_path = os.path.abspath(profile_image_path)
     file_url = f"file:///{absolute_path.replace(os.sep, '/')}"
     rendered = render_template("pdf_template.html", data=form_data, profile_image=file_url)
-    pdf_bytes = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options=pdf_options)
+
+    # Convert to PDF using PDFShift
+    response = requests.post(
+        "https://api.pdfshift.io/v3/convert/html",
+        auth=(PDFSHIFT_API_KEY, ''),
+        json={"source": rendered}
+    )
+
+    if response.status_code != 200:
+        return f"PDF generation failed: {response.text}"
+
+    pdf_bytes = response.content
 
     msg = EmailMessage()
     msg['Subject'] = 'Your Resume from Resume Pro Builder'
-    msg['From'] = 'svd0651@gmail.com'
+    msg['From'] = 'your_email@gmail.com'
     msg['To'] = email
     msg.set_content("Hi! Here is your professionally generated resume as a PDF. Best of luck!")
 
@@ -74,7 +87,7 @@ def send_email():
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('svd0651@gmail.com', 'omrf hqjr tumu kjmo')
+            smtp.login('your_email@gmail.com', 'your_app_password')
             smtp.send_message(msg)
         return "✅ Email sent successfully!"
     except Exception as e:
