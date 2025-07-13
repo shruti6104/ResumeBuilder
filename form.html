@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Builder Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 40px;
+        }
+        .form-container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #007acc;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        button {
+            margin-top: 25px;
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #005b99;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Build Your Resume</h2>
+        <form action="/preview" method="POST" enctype="multipart/form-data">
+
+            <label>Full Name</label>
+            <input type="text" name="name" required>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Phone Number</label>
+            <input type="text" name="phone" required>
+
+            <label>Upload Profile Photo</label>
+            <input type="file" name="profile" accept="image/*">
+
+            <label>LinkedIn URL</label>
+            <input type="url" name="linkedin" placeholder="https://linkedin.com/in/your-profile">
+
+            <label>GitHub URL</label>
+            <input type="url" name="github" placeholder="https://github.com/your-username">
+
+            <label>Degree</label>
+            <input type="text" name="degree">
+
+            <label>College</label>
+            <input type="text" name="college">
+
+            <label>Passing Year</label>
+            <input type="text" name="year">
+
+            <label>Skills (comma-separated)</label>
+            <textarea name="skills" placeholder="e.g. Python, Data Analysis, Flask"></textarea>
+
+            <label>Projects</label>
+            <textarea name="projects"></textarea>
+
+            <label>Experience</label>
+            <textarea name="experience"></textarea>
+
+            <label>Certifications</label>
+            <textarea name="certifications"></textarea>
+
+            <label>Objective</label>
+            <textarea name="objective"></textarea>
+
+            <button type="submit">Preview Resume</button>
+        </form>
+    </div>
+</body>
+</html>

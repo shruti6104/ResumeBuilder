@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Preview - {{ data.name }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f8fc;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 240px;
+            background-color: #007acc;
+            color: white;
+            padding: 30px 20px;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #005b99;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .sidebar a:hover {
+            background-color: #004c80;
+        }
+        .preview-content {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff;
+            overflow-y: auto;
+        }
+        .resume {
+            max-width: 850px;
+            margin: auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header img {
+            height: 100px;
+            width: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .header-info h1 {
+            margin: 0;
+            color: #007acc;
+        }
+        .links a {
+            margin-right: 15px;
+            color: #007acc;
+            text-decoration: none;
+        }
+        h2 {
+            color: #444;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+        p {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Actions</h2>
+            <a href="/download" target="_blank">⬇️ Download PDF</a>
+            <a href="/send_email">📧 Send to Email</a>
+            <a href="/" style="background-color:#ff9800;">✏️ Edit Again</a>
+        </div>
+
+        <div class="preview-content">
+            <div class="resume">
+                <div class="header">
+                    {% if profile_image %}
+                        <img src="{{ profile_image }}" alt="Profile">
+                    {% endif %}
+                    <div class="header-info">
+                        <h1>{{ data.name }}</h1>
+                        <p><strong>Email:</strong> {{ data.email }}</p>
+                        <p><strong>Phone:</strong> {{ data.phone }}</p>
+                        <div class="links">
+                            {% if data.linkedin %}<a href="{{ data.linkedin }}">LinkedIn</a>{% endif %}
+                            {% if data.github %}<a href="{{ data.github }}">GitHub</a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Objective</h2>
+                <p>{{ data.objective }}</p>
+
+                <h2>Education</h2>
+                <p><strong>Degree:</strong> {{ data.degree }}</p>
+                <p><strong>College:</strong> {{ data.college }}</p>
+                <p><strong>Passing Year:</strong> {{ data.year }}</p>
+
+                <h2>Skills</h2>
+                <p>{{ data.skills }}</p>
+
+                <h2>Projects</h2>
+                <p>{{ data.projects }}</p>
+
+                <h2>Experience</h2>
+                <p>{{ data.experience }}</p>
+
+                <h2>Certifications</h2>
+                <p>{{ data.certifications }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
